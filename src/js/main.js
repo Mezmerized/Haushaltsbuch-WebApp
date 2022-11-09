@@ -50,29 +50,32 @@ EntryOutput() {
                     newBalance.balance -= entry.value;
                     break;
                 default: 
-                    console.log(`Der Typ "${this.newEntry.type}" ist nicht bekannt!`)
+                    console.log(`Der Typ "${entry.type}" ist nicht bekannt!`)
                     break;
             }
         });
         this.overallBalance = newBalance;
     },
 
- /*   BalanceOutput() {
-        console.log(`Einnahme: ${this.overallBalance.income} ct
-Ausgabe: ${this.overallBalance.expense} ct
-Bilanz: ${this.overallBalance.balance} ct
-Bilanz ist positiv ${this.overallBalance.balance >= 0}`);
-    }, */
+    BalanceOutput() {
+        console.log(`Einnahme: ${this.overallBalance.income} ct\n`
+            + `Ausgabe: ${this.overallBalance.expense} ct\n`
+            + `Bilanz: ${this.overallBalance.balance} ct\n`
+            + `Bilanz ist positiv: ${this.overallBalance.balance >= 0}`
+        );
+    },
 
     AddEntry() {
-        this.GetEntry();
-        this.EntryOutput();
-        this.CreateBalance();
-//        this.BalanceOutput();
+        let newEntry = true;
+        while (newEntry) {
+            this.GetEntry();
+            this.EntryOutput();
+            this.CreateBalance();
+            this.BalanceOutput();
+            newEntry = confirm("Weiterer Eintrag hinzufügen?");
+        }
     }
 };
 
-haushaltsbuch.AddEntry();
-haushaltsbuch.AddEntry();
 haushaltsbuch.AddEntry();
 console.log(haushaltsbuch)
