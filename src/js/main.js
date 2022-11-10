@@ -10,7 +10,7 @@ const haushaltsbuch = {
 
     entries: [],
 
-    GetEntry() {
+    getEntry() {
         this.entries.push(
             {
             title: prompt("Title:"),
@@ -21,7 +21,7 @@ const haushaltsbuch = {
         );
     },
 
-    SortEntries() {
+    sortEntries() {
         this.entries.sort(function(entryA, entryB) {
             if (entryA.date > entryB.date) {
                 return -1;
@@ -33,7 +33,7 @@ const haushaltsbuch = {
         })
     },
 
-    EntryOutput() {
+    entryOutput() {
         console.clear();
         this.entries.forEach(function(entry) {
             console.log(`Titel: ${entry.title}\n`
@@ -45,7 +45,7 @@ const haushaltsbuch = {
 
     },
 
-    CreateBalance() {
+    createBalance() {
         let newBalance = {
             income: 0,
             expense: 0,
@@ -69,7 +69,7 @@ const haushaltsbuch = {
         this.overallBalance = newBalance;
     },
 
-    BalanceOutput() {
+    balanceOutput() {
         console.log(`Einnahme: ${this.overallBalance.income} ct\n`
             + `Ausgabe: ${this.overallBalance.expense} ct\n`
             + `Bilanz: ${this.overallBalance.balance} ct\n`
@@ -77,18 +77,18 @@ const haushaltsbuch = {
         );
     },
 
-    AddEntry() {
+    addEntry() {
         let newEntry = true;
         while (newEntry) {
-            this.GetEntry();
-            this.SortEntries();
-            this.EntryOutput();
-            this.CreateBalance();
-            this.BalanceOutput();
+            this.getEntry();
+            this.sortEntries();
+            this.entryOutput();
+            this.createBalance();
+            this.balanceOutput();
             newEntry = confirm("Weiterer Eintrag hinzufügen?");
         }
     }
 };
 
-haushaltsbuch.AddEntry();
+haushaltsbuch.addEntry();
 console.log(haushaltsbuch)
