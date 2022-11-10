@@ -21,7 +21,19 @@ const haushaltsbuch = {
         );
     },
 
-EntryOutput() {
+    SortEntries() {
+        this.entries.sort(function(entryA, entryB) {
+            if (entryA.date > entryB.date) {
+                return -1;
+            } else if (entryA.date < entryB.date) {
+                return 1;
+            } else {
+                return 0;
+            }
+        })
+    },
+
+    EntryOutput() {
         console.clear();
         this.entries.forEach(function(entry) {
             console.log(`Titel: ${entry.title}\n`
@@ -69,6 +81,7 @@ EntryOutput() {
         let newEntry = true;
         while (newEntry) {
             this.GetEntry();
+            this.SortEntries();
             this.EntryOutput();
             this.CreateBalance();
             this.BalanceOutput();
