@@ -2,30 +2,24 @@
 
 const haushaltsbuch = {
 
-    overallBalance: {
-        income: 0,
-        expense: 0,
-        balance: 0
-    },
-
+    overallBalance: new Map(),
+    
     entries: [],
 
     getEntry() {
-        this.entries.push(
-            {
-            title: prompt("Title:"),
-            type: prompt("Typ (Einnahme oder Ausgabe):"),
-            value: parseInt(prompt("Betrag (in Cent:)")),
-            date: prompt("Datum (yyyy-mm-dd):")
-            }
-        );
+        let newEntry = new Map();
+        newEntry.set("title", prompt("Titel:"));
+        newEntry.set("type", prompt("Typ (Einnahme oder Ausgabe):"));
+        newEntry.set("value", parseInt(prompt("Betrag (in Cent:)")));
+        newEntry.set("date" , prompt("Datum (yyyy-mm-dd):"));
+        this.entries.push(newEntry);
     },
 
     sortEntries() {
         this.entries.sort(function(entryA, entryB) {
-            if (entryA.date > entryB.date) {
+            if (entryA.get("date") > entryB.get("date")) {
                 return -1;
-            } else if (entryA.date < entryB.date) {
+            } else if (entryA.get("date") < entryB.get("date")) {
                 return 1;
             } else {
                 return 0;
@@ -36,33 +30,32 @@ const haushaltsbuch = {
     entryOutput() {
         console.clear();
         this.entries.forEach(function(entry) {
-            console.log(`Titel: ${entry.title}\n`
-                + `Typ: ${entry.type}\n`
-                + `Betrag: ${entry.value} ct\n`
-                + `Datum: ${entry.date}`
+            console.log(`Titel: ${entry.get("title")}\n`
+                + `Typ: ${entry.get("type")}\n`
+                + `Betrag: ${entry.get("value")} ct\n`
+                + `Datum: ${entry.get("date")}`
             );
         });
 
     },
 
     createBalance() {
-        let newBalance = {
-            income: 0,
-            expense: 0,
-            balance: 0
-        };
+        let newBalance = new Map();
+        newBalance.set("income", 0);
+        newBalance.set("expense", 0);
+        newBalance.set("balance", 0);
         this.entries.forEach(function(entry) {
-            switch (entry.type) {
+            switch (entry.get("type")) {
                 case "Einnahme":
-                    newBalance.income += entry.value;
-                    newBalance.balance += entry.value;
+                    newBalance.set("income", newBalance.get("income") + entry.get("value"))
+                    newBalance.set("balance", newBalance.get("balance") + entry.get("value"))
                     break;
                 case "Ausgabe":
-                    newBalance.expense += entry.value;
-                    newBalance.balance -= entry.value;
+                    newBalance.set("expense", newBalance.get("expense") + entry.get("value"))
+                    newBalance.set("balance", newBalance.get("balance") - entry.get("value"))
                     break;
                 default: 
-                    console.log(`Der Typ "${entry.type}" ist nicht bekannt!`)
+                    console.log(`Der Typ "${entry.get("type")}" ist nicht bekannt!`)
                     break;
             }
         });
@@ -70,10 +63,10 @@ const haushaltsbuch = {
     },
 
     balanceOutput() {
-        console.log(`Einnahme: ${this.overallBalance.income} ct\n`
-            + `Ausgabe: ${this.overallBalance.expense} ct\n`
-            + `Bilanz: ${this.overallBalance.balance} ct\n`
-            + `Bilanz ist positiv: ${this.overallBalance.balance >= 0}`
+        console.log(`Einnahme: ${this.overallBalance.get("income")} ct\n`
+            + `Ausgabe: ${this.overallBalance.get("expense")} ct\n`
+            + `Bilanz: ${this.overallBalance.get("balance")} ct\n`
+            + `Bilanz ist positiv: ${this.overallBalance.get("balance") >= 0}`
         );
     },
 
