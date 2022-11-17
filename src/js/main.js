@@ -11,7 +11,8 @@ const haushaltsbuch = {
         newEntry.set("title", prompt("Titel:"));
         newEntry.set("type", prompt("Typ (Einnahme oder Ausgabe):"));
         newEntry.set("value", parseInt(prompt("Betrag (in Cent:)")));
-        newEntry.set("date" , prompt("Datum (yyyy-mm-dd):"));
+        newEntry.set("date" , new Date(prompt("Datum (yyyy-mm-dd):") + " 00:00:00"));
+        newEntry.set("timestamp", Date.now());
         this.entries.push(newEntry);
     },
 
@@ -33,7 +34,11 @@ const haushaltsbuch = {
             console.log(`Titel: ${entry.get("title")}\n`
                 + `Typ: ${entry.get("type")}\n`
                 + `Betrag: ${entry.get("value")} ct\n`
-                + `Datum: ${entry.get("date")}`
+                + `Datum: ${entry.get("date").toLocaleDateString("de-DE", {
+                    year: "numeric",
+                    month: "2-digit",
+                    day: "2-digit"
+                })}`
             );
         });
 
