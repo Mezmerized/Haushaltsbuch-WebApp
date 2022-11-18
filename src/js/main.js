@@ -70,11 +70,11 @@ const haushaltsbuch = {
             console.log(`Titel: ${eintrag.get("titel")}\n`
                 + `Typ: ${eintrag.get("typ")}\n`
                 + `Betrag: ${(eintrag.get("betrag") / 100).toFixed(2)} €\n`
-                + `Datum: ${eintrag.get("datum").toLocaledatumString("de-DE", {
+                + `Datum: ${eintrag.get("datum")/* .toLocaledateString("de-DE", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit"
-                })}`
+                }) */}`
             );
         });
 
