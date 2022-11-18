@@ -2,25 +2,61 @@
 
 const haushaltsbuch = {
 
-    overallBalance: new Map(),
+    gesamtbilanz: new Map(),
     
-    entries: [],
+    eintraege: [],
 
-    getEntry() {
-        let newEntry = new Map();
-        newEntry.set("title", prompt("Titel:"));
-        newEntry.set("type", prompt("Typ (Einnahme oder Ausgabe):"));
-        newEntry.set("value", parseInt(prompt("Betrag (in Cent:)")));
-        newEntry.set("date" , new Date(prompt("Datum (yyyy-mm-dd):") + " 00:00:00"));
-        newEntry.set("timestamp", Date.now());
-        this.entries.push(newEntry);
+    eintragErfassen() {
+        let neuerEintrag = new Map();
+        neuerEintrag.set("titel", prompt("Titel:").trim());
+        neuerEintrag.set("typ", prompt("Typ (Einnahme oder Ausgabe):").trim());
+        neuerEintrag.set("betrag", this.betragVerarbeiten(prompt("Betrag (in Euro, ohne €-Zeichen):").trim()));
+        neuerEintrag.set("datum" , this.datumValidieren(prompt("Datum (jjjj-mm-tt):").trim()));
+        neuerEintrag.set("timestamp", Date.now());
+        this.eintraege.push(neuerEintrag);
     },
 
-    sortEntries() {
-        this.entries.sort(function(entryA, entryB) {
-            if (entryA.get("date") > entryB.get("date")) {
+    betragVerarbeiten(betrag) {
+        if (this.betragValidieren(betrag)) {
+            return parseFloat(betrag.replace(",", ".")) * 100;
+        } else {
+            console.log(`Ungültiger Betrag: ${betrag} €`);
+            return false;
+        }
+        
+    },
+
+    betragValidieren(betrag) {
+        if (betrag.match(/^\d+(?:(?:,|\.)\d\d?)?$/) !== null) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    datumVerarbeiten(datum) {
+        if (this.datumValidieren(datum)) {
+            return new datum(`${datum} 00:00:00`);
+        } else {
+            console.log(`Ungültiges Datumsformat: ${datum}`);
+            return false;
+        }
+        
+    },
+
+    datumValidieren(datum) {
+        if (datum.match(/^\d{4}-\d{2}-\d{2}$/) !== null) {
+            return true;
+        } else {
+            return false;
+        }
+    },
+
+    eintraegeSortieren() {
+        this.eintraege.sort(function(eintragA, eintragB) {
+            if (eintragA.get("datum") > eintragB.get("datum")) {
                 return -1;
-            } else if (entryA.get("date") < entryB.get("date")) {
+            } else if (eintragA.get("datum") < eintragB.get("datum")) {
                 return 1;
             } else {
                 return 0;
@@ -28,13 +64,13 @@ const haushaltsbuch = {
         })
     },
 
-    entryOutput() {
+    eintragAusgeben() {
         console.clear();
-        this.entries.forEach(function(entry) {
-            console.log(`Titel: ${entry.get("title")}\n`
-                + `Typ: ${entry.get("type")}\n`
-                + `Betrag: ${entry.get("value")} ct\n`
-                + `Datum: ${entry.get("date").toLocaleDateString("de-DE", {
+        this.eintraege.forEach(function(eintrag) {
+            console.log(`Titel: ${eintrag.get("titel")}\n`
+                + `Typ: ${eintrag.get("typ")}\n`
+                + `Betrag: ${(eintrag.get("betrag") / 100).toFixed(2)} €\n`
+                + `Datum: ${eintrag.get("datum").toLocaledatumString("de-DE", {
                     year: "numeric",
                     month: "2-digit",
                     day: "2-digit"
@@ -44,49 +80,49 @@ const haushaltsbuch = {
 
     },
 
-    createBalance() {
-        let newBalance = new Map();
-        newBalance.set("income", 0);
-        newBalance.set("expense", 0);
-        newBalance.set("balance", 0);
-        this.entries.forEach(function(entry) {
-            switch (entry.get("type")) {
+    gesamtbilanzErstellen() {
+        let neueGesamtbilanz = new Map();
+        neueGesamtbilanz.set("einnahmen", 0);
+        neueGesamtbilanz.set("ausgaben", 0);
+        neueGesamtbilanz.set("bilanz", 0);
+        this.eintraege.forEach(function(eintrag) {
+            switch (eintrag.get("typ")) {
                 case "Einnahme":
-                    newBalance.set("income", newBalance.get("income") + entry.get("value"))
-                    newBalance.set("balance", newBalance.get("balance") + entry.get("value"))
+                    neueGesamtbilanz.set("einnahmen", neueGesamtbilanz.get("einnahmen") + eintrag.get("betrag"))
+                    neueGesamtbilanz.set("bilanz", neueGesamtbilanz.get("bilanz") + eintrag.get("betrag"))
                     break;
                 case "Ausgabe":
-                    newBalance.set("expense", newBalance.get("expense") + entry.get("value"))
-                    newBalance.set("balance", newBalance.get("balance") - entry.get("value"))
+                    neueGesamtbilanz.set("ausgaben", neueGesamtbilanz.get("ausgaben") + eintrag.get("betrag"))
+                    neueGesamtbilanz.set("bilanz", neueGesamtbilanz.get("bilanz") - eintrag.get("betrag"))
                     break;
                 default: 
-                    console.log(`Der Typ "${entry.get("type")}" ist nicht bekannt!`)
+                    console.log(`Der Typ "${eintrag.get("typ")}" ist nicht bekannt!`)
                     break;
             }
         });
-        this.overallBalance = newBalance;
+        this.gesamtBilanz = neueGesamtbilanz;
     },
 
-    balanceOutput() {
-        console.log(`Einnahme: ${this.overallBalance.get("income")} ct\n`
-            + `Ausgabe: ${this.overallBalance.get("expense")} ct\n`
-            + `Bilanz: ${this.overallBalance.get("balance")} ct\n`
-            + `Bilanz ist positiv: ${this.overallBalance.get("balance") >= 0}`
+    gesamtbilanzAusgeben() {
+        console.log(`Einnahme: ${(this.gesamtBilanz.get("einnahmen") / 100).toFixed(2)} €\n`
+            + `Ausgabe: ${(this.gesamtBilanz.get("ausgaben") / 100).toFixed(2)} €\n`
+            + `Bilanz: ${(this.gesamtBilanz.get("bilanz") / 100).toFixed(2)} €\n`
+            + `Bilanz ist positiv: ${(this.gesamtBilanz.get("bilanz") / 100) >= 0}`
         );
     },
 
-    addEntry() {
-        let newEntry = true;
-        while (newEntry) {
-            this.getEntry();
-            this.sortEntries();
-            this.entryOutput();
-            this.createBalance();
-            this.balanceOutput();
-            newEntry = confirm("Weiterer Eintrag hinzufügen?");
+    eintragHinzufuegen() {
+        let neuerEintrag = true;
+        while (neuerEintrag) {
+            this.eintragErfassen();
+            this.eintraegeSortieren();
+            this.eintragAusgeben();
+            this.gesamtbilanzErstellen();
+            this.gesamtbilanzAusgeben();
+            neuerEintrag = confirm("Weiterer Eintrag hinzufügen?");
         }
     }
 };
 
-haushaltsbuch.addEntry();
+haushaltsbuch.eintragHinzufuegen();
 console.log(haushaltsbuch)
