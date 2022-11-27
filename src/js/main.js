@@ -17,11 +17,10 @@ const haushaltsbuch = {
             this.eintraege.push(neuerEintrag);
         } else {
             console.log("Folgende Fehler wurden gefunden:");
-            this.fehler.forEach(function(fehler) {
-                console.log(fehler);
-            });
-        }
-        
+            this.fehler.forEach(fehler => 
+                console.log(fehler)
+            );
+        } 
     },
 
     betragVerarbeiten(betrag) {
@@ -31,7 +30,6 @@ const haushaltsbuch = {
         } else {
             this.fehler.push(`Ungültiger Betrag: ${betrag} €.`);
         }
-        
     },
 
     betragValidieren(betrag) {
@@ -49,7 +47,6 @@ const haushaltsbuch = {
         } else {
             this.fehler.push(`Ungültiges Datumsformat: ${datum}`);
         }
-        
     },
 
     datumValidieren(datum) {
@@ -67,7 +64,6 @@ const haushaltsbuch = {
         } else {
             this.fehler.push("Kein Titel angegeben!");
         }
-        
     },
 
     titelValidieren(titel) {
@@ -85,7 +81,6 @@ const haushaltsbuch = {
         } else {
             this.fehler.push(`Ungültiger Eintrags-typ: "${typ}".`);
         }
-        
     },
 
     typValidieren(typ) {
@@ -97,7 +92,7 @@ const haushaltsbuch = {
     },
 
     eintraegeSortieren() {
-        this.eintraege.sort(function(eintragA, eintragB) {
+        this.eintraege.sort((eintragA, eintragB) => {
             if (eintragA.get("datum") > eintragB.get("datum")) {
                 return -1;
             } else if (eintragA.get("datum") < eintragB.get("datum")) {
@@ -146,19 +141,18 @@ const haushaltsbuch = {
         button.insertAdjacentElement("afterbegin", icon);
 
         return listenpunkt;
-
     },
 
     eintraegeAnzeigen() {
 
-        document.querySelectorAll(".monatsliste ul").forEach(function(eintragsliste) {
-            eintragsliste.remove();
-        });
+        document.querySelectorAll(".monatsliste ul").forEach(eintragsliste => 
+            eintragsliste.remove()
+        );
 
         let eintragsliste = document.createElement("ul");
-        for (let eintrag of this.eintraege) {
-            eintragsliste.insertAdjacentElement("beforeend", this.htmlEintragGenerieren(eintrag));
-        }
+        this.eintraege.forEach(eintrag => 
+            eintragsliste.insertAdjacentElement("beforeend", this.htmlEintragGenerieren(eintrag))
+        );         
         document.querySelector(".monatsliste").insertAdjacentElement("afterbegin", eintragsliste);
     },
 
@@ -167,7 +161,7 @@ const haushaltsbuch = {
         neueGesamtbilanz.set("einnahmen", 0);
         neueGesamtbilanz.set("ausgaben", 0);
         neueGesamtbilanz.set("bilanz", 0);
-        this.eintraege.forEach(function(eintrag) {
+        this.eintraege.forEach(eintrag => {
             switch (eintrag.get("typ")) {
                 case "einnahme":
                     neueGesamtbilanz.set("einnahmen", neueGesamtbilanz.get("einnahmen") + eintrag.get("betrag"))
@@ -184,13 +178,6 @@ const haushaltsbuch = {
         });
         this.gesamtbilanz = neueGesamtbilanz;
     },
-
-/*     <aside id="gesamtbilanz">
-    <h1>Gesamtbilanz</h1>
-    <div class="gesamtbilanz-zeile einnahmen"><span>Einnahmen:</span><span>0,00€</span></div>
-    <div class="gesamtbilanz-zeile ausgaben"><span>Ausgaben:</span><span>0,00€</span></div>
-    <div class="gesamtbilanz-zeile bilanz"><span>Bilanz:</span><span class="positiv">0,00€</span></div>
-</aside> */
 
     htmlGesamtbilanzGenerieren() {
 
@@ -237,16 +224,14 @@ const haushaltsbuch = {
         gesamtbilanz.insertAdjacentElement("beforeend", bilanzZeile);
 
         return gesamtbilanz;
-
     },
 
     gesamtbilanzAnzeigen() {
 
-        document.querySelectorAll("#gesamtbilanz").forEach(function(gesamtbilanz) {
-            gesamtbilanz.remove();
-        });
+        document.querySelectorAll("#gesamtbilanz").forEach(gesamtbilanz => 
+            gesamtbilanz.remove()
+        );
         document.querySelector("body").insertAdjacentElement("beforeend", this.htmlGesamtbilanzGenerieren());
-
     },
 
     eintragHinzufuegen() {
