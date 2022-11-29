@@ -37,24 +37,14 @@ const haushaltsbuch = {
 
     eintraegeSortieren() {
         this.eintraege.sort((eintragA, eintragB) => {
-            if (eintragA.get("datum") > eintragB.get("datum")) {
-                return -1;
-            } else if (eintragA.get("datum") < eintragB.get("datum")) {
-                return 1;
-            } else {
-                return 0;
-            }
-        })
+            return eintragA.get("datum") > eintragB.get("datum") ? -1 : eintragA.get("datum") < eintragB.get("datum") ? 1 : 0;
+        });
     },
 
     htmlEintragGenerieren(eintrag) {
 
         let listenpunkt = document.createElement("li");
-        if (eintrag.get("typ") === "einnahme") {
-            listenpunkt.setAttribute("class", "einnahme");
-        } else if (eintrag.get("typ") === "ausgabe") {
-            listenpunkt.setAttribute("class", "ausgabe")
-        }
+        eintrag.get("typ") === "einnahme" ? listenpunkt.setAttribute("class", "einnahme") :  listenpunkt.setAttribute("class", "ausgabe"),
         listenpunkt.setAttribute("data-timestamp", eintrag.get("timestamp"));
 
         let datum = document.createElement("span");
@@ -98,14 +88,9 @@ const haushaltsbuch = {
 
     eintraegeAnzeigen() {
 
-        document.querySelectorAll(".monatsliste ul").forEach(eintragsliste => 
-            eintragsliste.remove()
-        );
-
+        document.querySelectorAll(".monatsliste ul").forEach(eintragsliste => eintragsliste.remove());
         let eintragsliste = document.createElement("ul");
-        this.eintraege.forEach(eintrag => 
-            eintragsliste.insertAdjacentElement("beforeend", this.htmlEintragGenerieren(eintrag))
-        );         
+        this.eintraege.forEach(eintrag => eintragsliste.insertAdjacentElement("beforeend", this.htmlEintragGenerieren(eintrag)));         
         document.querySelector(".monatsliste").insertAdjacentElement("afterbegin", eintragsliste);
     },
 
@@ -167,11 +152,7 @@ const haushaltsbuch = {
         bilanzTitel.textContent = "Bilanz:";
         bilanzZeile.insertAdjacentElement("afterbegin", bilanzTitel);
         let bilanzBetrag = document.createElement("span");
-        if(this.gesamtbilanz.get("bilanz") >= 0) {
-            bilanzBetrag.setAttribute("class", "positiv");
-        } else if (this.gesamtbilanz.get("bilanz") < 0) {
-            bilanzBetrag.setAttribute("class", "negativ");
-        }
+        this.gesamtbilanz.get("bilanz") >= 0 ?  bilanzBetrag.setAttribute("class", "positiv") : bilanzBetrag.setAttribute("class", "negativ");
         bilanzBetrag.textContent = `${(this.gesamtbilanz.get("bilanz") / 100).toFixed(2).replace(/\./, ",")} €`;
         bilanzZeile.insertAdjacentElement("beforeend", bilanzBetrag);
         gesamtbilanz.insertAdjacentElement("beforeend", bilanzZeile);
@@ -181,9 +162,7 @@ const haushaltsbuch = {
 
     gesamtbilanzAnzeigen() {
 
-        document.querySelectorAll("#gesamtbilanz").forEach(gesamtbilanz => 
-            gesamtbilanz.remove()
-        );
+        document.querySelectorAll("#gesamtbilanz").forEach(gesamtbilanz => gesamtbilanz.remove());
         document.querySelector("body").insertAdjacentElement("beforeend", this.htmlGesamtbilanzGenerieren());
     }
 };
