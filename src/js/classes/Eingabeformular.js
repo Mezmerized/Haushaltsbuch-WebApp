@@ -52,48 +52,17 @@ class Eingabeformular {
                 let formularFehler = this._formulardatenValidieren(formulardaten);
                 if (formularFehler.length === 0) {
                     haushaltsbuch.eintragHinzufuegen(formulardaten);
-                    this._fehlerboxEntfernen();
+                    let bestehendeFehlerbox = document.querySelector(".fehlerbox");
+                    if (bestehendeFehlerbox !== null) {
+                        bestehendeFehlerbox.remove();
+                    }
                     e.target.reset();
                     this._datumAktualisieren();
                 } else {
-                    this._fehlerboxEntfernen();
-                    this._fehlerboxAnzeigen(formularFehler);
+                    let fehler = new Fehler("Folgende Felder wurden nicht korrek ausgefüllt!", formularFehler);
+                    fehler.anzeigen();
                 }
             });
-        }
-    
-        _htmlFehlerboxGenerieren(formularFehler) {
-            let fehlerbox = document.createElement("div");
-            fehlerbox.setAttribute("class", "fehlerbox");
-    
-            let fehlertext = document.createElement("span");
-            fehlertext.textContent = "Folgende Felder wurden nicht korret ausgefüllt:";
-            fehlerbox.insertAdjacentElement("afterbegin", fehlertext);
-    
-            let fehlerliste = document.createElement("ul");
-            formularFehler.forEach(fehler => {
-                let fehlerlistenpunkt = document.createElement("li");
-                fehlerlistenpunkt.textContent = fehler;
-                fehlerliste.insertAdjacentElement("beforeend", fehlerlistenpunkt);
-            });
-    
-            fehlerbox.insertAdjacentElement("beforeend", fehlerliste);
-    
-            return fehlerbox;
-        }
-    
-        _fehlerboxAnzeigen(formularFehler) {
-            let eingabeformularContainer = document.querySelector("#eingabeformular-container");
-            if (eingabeformularContainer !== null) {
-                eingabeformularContainer.insertAdjacentElement("afterbegin", this._htmlFehlerboxGenerieren(formularFehler));
-            }
-        }
-    
-        _fehlerboxEntfernen() {
-            let bestehendeFehlerbox = document.querySelector(".fehlerbox");
-            if (bestehendeFehlerbox !== null) {
-                bestehendeFehlerbox.remove();
-            }
         }
     
         _htmlGenerieren() {
