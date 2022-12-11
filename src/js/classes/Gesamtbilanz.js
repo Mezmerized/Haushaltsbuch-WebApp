@@ -33,7 +33,6 @@ class Gesamtbilanz {
     }
 
     _htmlGenerieren() {
-
         let gesamtbilanz = document.createElement("aside");
         gesamtbilanz.setAttribute("id", "gesamtbilanz");
 
@@ -76,7 +75,6 @@ class Gesamtbilanz {
     }
 
     anzeigen() {
-
         let gesamtbilanz = document.querySelector("#gesamtbilanz");
         if (gesamtbilanz !== null) {
             gesamtbilanz.remove();

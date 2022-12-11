@@ -49,7 +49,6 @@ class Monatslistensammlung {
     };
 
     _htmlGenerieren() {
-
         let monatslisten = document.createElement("section");
         monatslisten.setAttribute("id", "monatslisten");
 

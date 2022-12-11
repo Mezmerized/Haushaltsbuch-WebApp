@@ -36,7 +36,6 @@ class Eintrag {
     }
 
     _htmlGenerieren() {
-
         let listenpunkt = document.createElement("li");
         this._typ === "einnahme" ? listenpunkt.setAttribute("class", "einnahme") :  listenpunkt.setAttribute("class", "ausgabe"),
         listenpunkt.setAttribute("data-timestamp", this._timestamp);

@@ -57,7 +57,6 @@ class Monatsliste {
     }
 
     _htmlGenreiren() {
-
         let monatsliste = document.createElement("article");
         monatsliste.setAttribute("class", "monatsliste");
 
