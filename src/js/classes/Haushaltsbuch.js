@@ -31,6 +31,7 @@ class Haushaltsbuch {
         }
 
         this._eintraege.splice(startIndex, 1);
+        this._monatslistensammlung.aktualisieren(this._eintraege);
         this._gesamtbilanz.aktualisieren(this._eintraege);
     }
 
