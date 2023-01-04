@@ -3,8 +3,8 @@
  * @module classes/Eingabeformular
 */ 
 
-import Fehler from "./Fehler.js";
-import haushaltsbuch from "./../main.js";
+import Fehlerbox from "./Fehlerbox.js";
+import liquiPlanner from "../liqui-planner.js";
 
 /**
  * Die Klasse Eingabeformular stellt alle Eigenschaften und Methoden 
@@ -76,7 +76,7 @@ export default class Eingabeformular {
                 let formulardaten = this._formulardatenVerabeiten(this._formulardatenHolen(e));
                 let formularFehler = this._formulardatenValidieren(formulardaten);
                 if (formularFehler.length === 0) {
-                    haushaltsbuch.eintragHinzufuegen(formulardaten);
+                    liquiPlanner.eintragHinzufuegen(formulardaten);
                     let bestehendeFehlerbox = document.querySelector(".fehlerbox");
                     if (bestehendeFehlerbox !== null) {
                         bestehendeFehlerbox.remove();
@@ -84,7 +84,7 @@ export default class Eingabeformular {
                     e.target.reset();
                     this._datumAktualisieren();
                 } else {
-                    let fehler = new Fehler("Folgende Felder wurden nicht korrek ausgefüllt!", formularFehler);
+                    let fehler = new Fehlerbox("Folgende Felder wurden nicht korrek ausgefüllt!", formularFehler);
                     fehler.anzeigen();
                 }
             });
@@ -110,9 +110,9 @@ export default class Eingabeformular {
                 <div class="eingabeformular-zeile">
                     <div class="betrag-datum-eingabe-gruppe">
                         <label for="betrag">Betrag</label>
-                        <input type="number" id="betrag" name="betrag" form="eingabeformular" placeholder="z.B. 10,42" size="10" step="0.01" title="Betrag des Eintrags (max. zwei Nachkommastellen, kein €-Zeichen)">
+                        <input type="number" id="betrag" name="betrag" form="eingabeformular" placeholder="z.B. 10,42" size="10" step="0.01" min ="0.01" title="Betrag des Eintrags (max. zwei Nachkommastellen, kein €-Zeichen)">
                         <label for="datum">Datum</label>
-                        <input type="date" id="datum" name="datum" form="eingabeformular" placeholder="jjjj-mm-tt" size="10" title="Datum des Eintrags (Format: jjjj-mm-tt)">
+                        <input type="date" id="datum" name="datum" form="eingabeformular" size="10" title="Datum des Eintrags">
                     </div>
                 </div>
                 <div class="eingabeformular-zeile">
@@ -125,9 +125,9 @@ export default class Eingabeformular {
         }
     
         anzeigen() {
-            let navigationsleiste = document.querySelector("body");
+            let navigationsleiste = document.querySelector("#navigationsleiste");
             if (navigationsleiste !== null) {
-                navigationsleiste.insertAdjacentElement("afterbegin", this._html);
+                navigationsleiste.insertAdjacentElement("afterend", this._html);
                 this._datumAktualisieren()};
         }
 }

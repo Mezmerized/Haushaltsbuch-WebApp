@@ -1,4 +1,4 @@
-import haushaltsbuch from "./../main.js";
+import liquiPlanner from "../liqui-planner.js";
 
 export default class Eintrag {
 
@@ -75,7 +75,7 @@ export default class Eintrag {
     _eintragEntfernenEventHinzufuegen(listenpunkt) {
         listenpunkt.querySelector(".entfernen-button").addEventListener("click", e => {
             let timestamp = e.target.parentElement.getAttribute("data-timestamp");
-            haushaltsbuch.eintragEntfernen(timestamp);
+            liquiPlanner.eintragEntfernen(timestamp);
         });
     }
 
