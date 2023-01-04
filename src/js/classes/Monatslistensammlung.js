@@ -1,10 +1,6 @@
-"use strict";
-/* 
-<section id="monatslisten">
+import Monatsliste from "./Monatsliste.js";
 
-</section> */
-
-class Monatslistensammlung {
+export default class Monatslistensammlung {
 
     constructor() {
         this._monatslisten = [];

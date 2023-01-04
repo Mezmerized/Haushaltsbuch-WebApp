@@ -1,0 +1,2 @@
+[Wed Jan 04 15:22:16.772380 2023] [authz_core:error] [pid 12432:tid 1892] [client ::1:51053] AH01630: client denied by server configuration: D:/liqui-planner/
+[Wed Jan 04 15:22:16.811414 2023] [authz_core:error] [pid 12432:tid 1892] [client ::1:51053] AH01630: client denied by server configuration: D:/liqui-planner/favicon.ico, referer: http://liqui-planner.localhost/
